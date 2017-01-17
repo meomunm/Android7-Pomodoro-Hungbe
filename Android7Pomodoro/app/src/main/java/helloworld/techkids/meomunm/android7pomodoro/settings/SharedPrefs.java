@@ -14,9 +14,7 @@ import helloworld.techkids.meomunm.android7pomodoro.activities.TaskSettingActivi
 public class SharedPrefs {
     private static final String SHARED_PREFS_NAME = "SP";
     private static final String LOGIN_KEY = "login";
-    private static final String WORK_TIME_KEY = "worktime";
-    private static final String BREAK_TIME_KEY = "breaktime";
-    private static final String LONG_BREAK_TIME_KEY = "longbreaktime";
+    private static final String TASK_SETTING_KEY = "setting";
     private static SharedPrefs instance;
     private SharedPreferences sharedPreferences;
     private Gson gson;
@@ -41,24 +39,9 @@ public class SharedPrefs {
         this.sharedPreferences.edit().putString(LOGIN_KEY, loginJSON).commit();
     }
 
-    public void put(TaskSettingActivity taskSettingActivity, String key, int value) {
-        int valueSetting = value;
-        if (key.equals(this.WORK_TIME_KEY)) {
-            this.sharedPreferences.edit().putInt(WORK_TIME_KEY, valueSetting).commit();
-        } else if (key.equals(BREAK_TIME_KEY)) {
-            this.sharedPreferences.edit().putInt(BREAK_TIME_KEY, valueSetting).commit();
-        } else if (key.equals(LONG_BREAK_TIME_KEY)) {
-            this.sharedPreferences.edit().putInt(LONG_BREAK_TIME_KEY, valueSetting).commit();
-        }
-    }
-    public int getValue(String key){
-        if (key.equals(WORK_TIME_KEY)){
-            return sharedPreferences.getInt(WORK_TIME_KEY, 0);
-        }else if (key.equals(BREAK_TIME_KEY)){
-            return sharedPreferences.getInt(BREAK_TIME_KEY, 0);
-        }else if (key.equals(LONG_BREAK_TIME_KEY)){
-            return sharedPreferences.getInt(LONG_BREAK_TIME_KEY, 0);
-        } return 0;
+    public void put(TaskSettingCredentials taskSettingCredentials) {
+        String taskSettingJSON = gson.toJson(taskSettingCredentials);
+        this.sharedPreferences.edit().putString(TASK_SETTING_KEY, taskSettingJSON).commit();
     }
 
     public LoginCredentials getLoginCredentials() {
@@ -68,5 +51,12 @@ public class SharedPrefs {
         if (loginJSON == null) return null;
         LoginCredentials loginCredentials = gson.fromJson(loginJSON, LoginCredentials.class);
         return loginCredentials;
+    }
+
+    public TaskSettingCredentials getTaskSettingCredentials(){
+        String taskSettingJSON = this.sharedPreferences.getString(TASK_SETTING_KEY, null);
+        if (taskSettingJSON == null) {return null;}
+        TaskSettingCredentials taskSettingCredentials = gson.fromJson(taskSettingJSON, TaskSettingCredentials.class);
+        return taskSettingCredentials;
     }
 }

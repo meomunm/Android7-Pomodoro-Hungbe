@@ -9,6 +9,7 @@ import org.w3c.dom.Text;
 
 import helloworld.techkids.meomunm.android7pomodoro.R;
 import helloworld.techkids.meomunm.android7pomodoro.settings.SharedPrefs;
+import helloworld.techkids.meomunm.android7pomodoro.settings.TaskSettingCredentials;
 
 public class TaskSettingActivity extends AppCompatActivity {
     private TextView tvWorktime;
@@ -17,10 +18,6 @@ public class TaskSettingActivity extends AppCompatActivity {
     private SeekBar sbBreaktime;
     private TextView tvLongBreaktime;
     private SeekBar sbLongBreaktime;
-
-    private static final String WORK_TIME_KEY = "worktime";
-    private static final String BREAK_TIME_KEY = "breaktime";
-    private static final String LONG_BREAK_TIME_KEY = "longbreaktime";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +33,7 @@ public class TaskSettingActivity extends AppCompatActivity {
         tvLongBreaktime = (TextView) findViewById(R.id.tv_longbreaktime);
         sbLongBreaktime = (SeekBar) findViewById(R.id.sb_longbreaktime);
 
-        loadSaveSettings();
+        loadSaveSetting();
 
         sbWorktime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -51,7 +48,10 @@ public class TaskSettingActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                SharedPrefs.getInstance().put(new TaskSettingActivity(), WORK_TIME_KEY, sbWorktime.getProgress());
+                SharedPrefs.getInstance().put(new TaskSettingCredentials(
+                        sbWorktime.getProgress(),
+                        sbBreaktime.getProgress(),
+                        sbLongBreaktime.getProgress()));
             }
         });
         sbBreaktime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -67,7 +67,10 @@ public class TaskSettingActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                SharedPrefs.getInstance().put(new TaskSettingActivity(), BREAK_TIME_KEY, sbBreaktime.getProgress());
+                SharedPrefs.getInstance().put(new TaskSettingCredentials(
+                        sbWorktime.getProgress(),
+                        sbBreaktime.getProgress(),
+                        sbLongBreaktime.getProgress()));
             }
         });
         sbLongBreaktime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -83,18 +86,25 @@ public class TaskSettingActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                SharedPrefs.getInstance().put(new TaskSettingActivity(), LONG_BREAK_TIME_KEY, sbLongBreaktime.getProgress());
+                SharedPrefs.getInstance().put(new TaskSettingCredentials(
+                        sbWorktime.getProgress(),
+                        sbBreaktime.getProgress(),
+                        sbLongBreaktime.getProgress()));
             }
         });
     }
-
-    private void loadSaveSettings(){
-        sbWorktime.setProgress(SharedPrefs.getInstance().getValue(WORK_TIME_KEY));
-        sbBreaktime.setProgress(SharedPrefs.getInstance().getValue(BREAK_TIME_KEY));
-        sbLongBreaktime.setProgress(SharedPrefs.getInstance().getValue(LONG_BREAK_TIME_KEY));
-
+    public void loadSaveSetting(){
         tvWorktime.setText(String.format("Work time %s mins", sbWorktime.getProgress()));
         tvBreaktime.setText(String.format("Break time %s mins", sbBreaktime.getProgress()));
-        tvLongBreaktime.setText(String.format("Long break %s mins", sbBreaktime.getProgress()));
+        tvLongBreaktime.setText(String.format("Long break time %s mins", sbLongBreaktime.getProgress()));
+        if (SharedPrefs.getInstance().getTaskSettingCredentials() == null){
+            sbWorktime.setProgress(25);
+            sbBreaktime.setProgress(5);
+            sbLongBreaktime.setProgress(10);
+        }else {
+            sbWorktime.setProgress(SharedPrefs.getInstance().getTaskSettingCredentials().getWorktime());
+            sbBreaktime.setProgress(SharedPrefs.getInstance().getTaskSettingCredentials().getBreaktime());
+            sbLongBreaktime.setProgress(SharedPrefs.getInstance().getTaskSettingCredentials().getLongBreaktime());
+        }
     }
 }
