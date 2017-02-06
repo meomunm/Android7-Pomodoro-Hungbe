@@ -53,9 +53,19 @@ public class SharedPrefs {
         return loginCredentials;
     }
 
-    public TaskSettingCredentials getTaskSettingCredentials(){
+    public String getAccessToken() {
+        LoginCredentials loginCred = getLoginCredentials();
+        if (loginCred != null){
+            return loginCred.getAccessToken();
+        }
+        return null;
+    }
+
+    public TaskSettingCredentials getTaskSettingCredentials() {
         String taskSettingJSON = this.sharedPreferences.getString(TASK_SETTING_KEY, null);
-        if (taskSettingJSON == null) {return null;}
+        if (taskSettingJSON == null) {
+            return null;
+        }
         TaskSettingCredentials taskSettingCredentials = gson.fromJson(taskSettingJSON, TaskSettingCredentials.class);
         return taskSettingCredentials;
     }

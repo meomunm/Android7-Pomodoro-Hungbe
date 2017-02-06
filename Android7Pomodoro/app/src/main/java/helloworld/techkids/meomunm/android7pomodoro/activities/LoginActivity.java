@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -32,8 +35,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
-    String username;
-    String password;
+    private String username;
+    private String password;
+    private String token;
 
     EditText etUsername;
     EditText etPassword;
@@ -66,6 +70,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 attemptRegister();
+            }
+        });
+        etPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE){
+                    attemptLogin();
+                    Log.d(TAG, "onEditorAction: done action");
+                    return true;
+                }
+                return false;
             }
         });
     }
@@ -103,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     Log.d(TAG, String.format("onResponse login, Oh Yeah: %s, code: %s", loginResponseJson, response.code()));
                     if (response.code() == 200) {
+                        token = loginResponseJson.getAccessToken();
                         onLoginSuccess();
                     }
                 }
@@ -149,13 +165,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void onLoginSuccess() {
-        SharedPrefs.getInstance().put(new LoginCredentials(username, password));
+        SharedPrefs.getInstance().put(new LoginCredentials(username, password, token));
         Toast.makeText(this, "Logged in", Toast.LENGTH_SHORT).show();
         gotoTaskActivity();
     }
 
     private void skipLoginIfPossible() {
-        if (SharedPrefs.getInstance().getLoginCredentials() != null) {
+        if (SharedPrefs.getInstance().getAccessToken() != null) {
             gotoTaskActivity();
         }
     }

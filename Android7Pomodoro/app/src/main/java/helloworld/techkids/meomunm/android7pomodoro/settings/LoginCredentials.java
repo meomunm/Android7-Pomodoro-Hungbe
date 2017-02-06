@@ -7,10 +7,20 @@ package helloworld.techkids.meomunm.android7pomodoro.settings;
 public class LoginCredentials {
     private String username;
     private String password;
+    private String accessToken;
 
-    public LoginCredentials(String username, String password) {
+    public LoginCredentials(String username, String password, String accessToken) {
         this.username = username;
         this.password = password;
+        this.accessToken = accessToken;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getUsername() {
@@ -31,9 +41,10 @@ public class LoginCredentials {
 
     @Override
     public String toString() {
-        return "LoginCredendials{" +
+        return "LoginCredentials{" +
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", accessToken='" + accessToken + '\'' +
                 '}';
     }
 }
