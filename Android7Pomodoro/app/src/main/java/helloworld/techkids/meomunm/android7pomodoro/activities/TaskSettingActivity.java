@@ -94,9 +94,9 @@ public class TaskSettingActivity extends AppCompatActivity {
         });
     }
     public void loadSaveSetting(){
-        tvWorktime.setText(String.format("Work time %s mins", sbWorktime.getProgress()));
-        tvBreaktime.setText(String.format("Break time %s mins", sbBreaktime.getProgress()));
-        tvLongBreaktime.setText(String.format("Long break time %s mins", sbLongBreaktime.getProgress()));
+        tvWorktime.setText(String.format("Work time %s mins", SharedPrefs.getInstance().getTaskSettingCredentials().getWorktime()));
+        tvBreaktime.setText(String.format("Break time %s mins", SharedPrefs.getInstance().getTaskSettingCredentials().getBreaktime()));
+        tvLongBreaktime.setText(String.format("Long break time %s mins", SharedPrefs.getInstance().getTaskSettingCredentials().getLongBreaktime()));
         if (SharedPrefs.getInstance().getTaskSettingCredentials() == null){
             sbWorktime.setProgress(25);
             sbBreaktime.setProgress(5);
