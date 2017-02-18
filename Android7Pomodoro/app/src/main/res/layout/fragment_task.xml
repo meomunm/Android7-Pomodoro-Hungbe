@@ -3,11 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="helloworld.techkids.meomunm.android7pomodoro.fragments.TaskFragment">
+    tools:context="techkids.vn.android7pomodoro.fragments.TaskFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <include layout="@layout/content_task"/>
+    <include layout="@layout/content_task" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -15,6 +13,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_black_24px" />
+        app:srcCompat="@drawable/ic_add_white_24px" />
 
 </FrameLayout>
